@@ -44,23 +44,15 @@ class Property
     self.rowid = @db.last_insert_row_id
   end
 
-  # requires hash of params
-  # title, property_type, address, rate, max_guests, email, phone
-  # any or all could be nil
-  def update(params = {})
-    self.title = params[:title] || ''
-    self.property_type = params[:property_type] || 0
-    self.address = params[:address] || ''
-    self.rate = params[:rate] || 0
-    self.max_guests = params[:max_guests] || 0
-    self.email = params[:email] || ''
-    self.phone = params[:phone] || ''
-  end
-
   def save
     @db.execute("UPDATE #{TABLE_NAME} SET title = ?, property_type = ?,
       address = ?, rate = ?, max_guests = ?, email = ?, phone = ?",
       self.title, self.property_type, self.address, self.rate,
       self.max_guests, self.email, self.phone)
+  end
+
+  def self.list
+    @db = Database.instance.connection
+    rows = @db.execute("SELECT * FROM #{TABLE_NAME}")
   end
 end

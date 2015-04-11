@@ -49,20 +49,19 @@ describe "Property" do
     end
   end
 
-  describe ".update" do
-    it "sets object attributes" do
-      property.update(title: 'My house')
-      expect(property.title).to eq 'My house'
-    end
-  end
-
   describe ".save" do
     it "saves changes to database" do
-      property.update(title: 'My house')
+      property.title = 'My house'
       property.save
       row = db.connection.execute("SELECT * FROM properties WHERE rowid = ?",
         property.rowid)
       expect(row[0][0]).to eq 'My house'
+    end
+  end
+
+  describe '#list' do
+    it 'returns the list of properties' do
+      expect(Property.list.count > 0).to be true
     end
   end
 end
